@@ -3,7 +3,7 @@ const Entraineur = require('../models/entraineurModel');
 const Salle = require('../models/salleModel');
 const crudController = require('./crudController');
 
-// Opérations CRUD de base
+
 exports.getAllCarrieres = crudController.getAll(Carriere);
 exports.getCarriere = crudController.getOne(Carriere, [
   { path: 'entraineur', select: 'nom prenom specialite' },
@@ -13,9 +13,9 @@ exports.createCarriere = crudController.createOne(Carriere);
 exports.updateCarriere = crudController.updateOne(Carriere);
 exports.deleteCarriere = crudController.deleteOne(Carriere);
 
-// Fonctionnalités spécifiques aux carrières
 
-// Récupérer toutes les carrières actives
+
+
 exports.getCarrieresActives = async (req, res) => {
   try {
     const carrieres = await Carriere.find({
@@ -41,7 +41,7 @@ exports.getCarrieresActives = async (req, res) => {
   }
 };
 
-// Terminer une carrière
+
 exports.terminerCarriere = async (req, res) => {
   try {
     const carriere = await Carriere.findById(req.params.id);
@@ -60,7 +60,7 @@ exports.terminerCarriere = async (req, res) => {
       });
     }
     
-    // Définir la date de fin
+    
     carriere.date_fin = req.body.date_fin || new Date();
     carriere.actif = false;
     
@@ -78,7 +78,7 @@ exports.terminerCarriere = async (req, res) => {
   }
 };
 
-// Ajouter une performance
+
 exports.ajouterPerformance = async (req, res) => {
   try {
     const { note, commentaire } = req.body;
@@ -99,7 +99,7 @@ exports.ajouterPerformance = async (req, res) => {
       });
     }
     
-    // Ajouter la nouvelle performance
+    
     carriere.performances.push({
       date: new Date(),
       note,
@@ -120,7 +120,7 @@ exports.ajouterPerformance = async (req, res) => {
   }
 };
 
-// Récupérer les performances d'une carrière
+
 exports.getPerformances = async (req, res) => {
   try {
     const carriere = await Carriere.findById(req.params.id);
@@ -132,7 +132,7 @@ exports.getPerformances = async (req, res) => {
       });
     }
     
-    // Trier les performances par date décroissante
+    
     const performances = carriere.performances.sort((a, b) => b.date - a.date);
     
     res.status(200).json({
