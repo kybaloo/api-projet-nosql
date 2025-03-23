@@ -7,7 +7,7 @@
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --detectOpenHandles",
     "test:watch": "cross-env NODE_ENV=test jest --watch --detectOpenHandles",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js --port:3005"
   },
   "keywords": [],
   "author": "",
