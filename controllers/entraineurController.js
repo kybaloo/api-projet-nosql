@@ -4,16 +4,16 @@ const Disponibilite = require('../models/disponibiliteModel');
 const Carriere = require('../models/carriereModel');
 const crudController = require('./crudController');
 
-// Opérations CRUD de base
+
 exports.getAllEntraineurs = crudController.getAll(Entraineur);
 exports.getEntraineur = crudController.getOne(Entraineur);
 exports.createEntraineur = crudController.createOne(Entraineur);
 exports.updateEntraineur = crudController.updateOne(Entraineur);
 exports.deleteEntraineur = crudController.deleteOne(Entraineur);
 
-// Fonctionnalités spécifiques aux entraîneurs
 
-// Récupérer les horaires d'un entraîneur
+
+
 exports.getHorairesEntraineur = async (req, res) => {
   try {
     const horaires = await Horaire.find({ entraineur: req.params.id })
@@ -32,7 +32,7 @@ exports.getHorairesEntraineur = async (req, res) => {
   }
 };
 
-// Récupérer les disponibilités d'un entraîneur
+
 exports.getDisponibilitesEntraineur = async (req, res) => {
   try {
     const disponibilites = await Disponibilite.find({ 
@@ -54,7 +54,7 @@ exports.getDisponibilitesEntraineur = async (req, res) => {
   }
 };
 
-// Récupérer la carrière d'un entraîneur
+
 exports.getCarrieresEntraineur = async (req, res) => {
   try {
     const carrieres = await Carriere.find({ entraineur: req.params.id })
@@ -74,13 +74,13 @@ exports.getCarrieresEntraineur = async (req, res) => {
   }
 };
 
-// Créer une disponibilité pour un entraîneur
+
 exports.createDisponibilite = async (req, res) => {
   try {
-    // Ajouter l'id de l'entraîneur au corps de la requête
+    
     req.body.entraineur = req.params.id;
     
-    // Vérifier si l'entraîneur existe
+    
     const entraineur = await Entraineur.findById(req.params.id);
     
     if (!entraineur) {
@@ -90,7 +90,7 @@ exports.createDisponibilite = async (req, res) => {
       });
     }
     
-    // Créer la disponibilité
+    
     const disponibilite = await Disponibilite.create(req.body);
     
     res.status(201).json({
@@ -105,7 +105,7 @@ exports.createDisponibilite = async (req, res) => {
   }
 };
 
-// Obtenir les entraîneurs disponibles pour une date donnée
+
 exports.getEntraineursDisponibles = async (req, res) => {
   try {
     const { date, heure_debut, heure_fin } = req.query;
@@ -117,10 +117,10 @@ exports.getEntraineursDisponibles = async (req, res) => {
       });
     }
     
-    // Convertir la date au format Date
+    
     const dateObj = new Date(date);
     
-    // Rechercher les disponibilités correspondantes
+    
     const disponibilites = await Disponibilite.find({
       date_dispo: { $eq: dateObj },
       heure_debut: { $lte: heure_debut },
@@ -128,7 +128,7 @@ exports.getEntraineursDisponibles = async (req, res) => {
       reserve: false
     }).populate('entraineur');
     
-    // Extraire les entraîneurs des disponibilités
+    
     const entraineurs = disponibilites.map(dispo => dispo.entraineur);
     
     res.status(200).json({

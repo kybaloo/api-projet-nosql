@@ -61,7 +61,7 @@ const equipementSchema = new mongoose.Schema({
   }
 });
 
-// Méthode pour vérifier si l'équipement est disponible
+
 equipementSchema.methods.estDisponible = function() {
   return this.etat !== 'À réparer' && this.etat !== 'Hors service' && this.quantite > 0;
 };

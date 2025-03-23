@@ -1,6 +1,6 @@
-// Contrôleur générique pour les opérations CRUD de base
 
-// Obtenir tous les éléments
+
+
 exports.getAll = (Model) => async (req, res) => {
   try {
     const items = await Model.find();
@@ -17,7 +17,7 @@ exports.getAll = (Model) => async (req, res) => {
   }
 };
 
-// Obtenir un élément par son ID
+
 exports.getOne = (Model, popOptions) => async (req, res) => {
   try {
     let query = Model.findById(req.params.id);
@@ -47,7 +47,7 @@ exports.getOne = (Model, popOptions) => async (req, res) => {
   }
 };
 
-// Créer un nouvel élément
+
 exports.createOne = (Model) => async (req, res) => {
   try {
     const newItem = await Model.create(req.body);
@@ -64,12 +64,12 @@ exports.createOne = (Model) => async (req, res) => {
   }
 };
 
-// Mettre à jour un élément
+
 exports.updateOne = (Model) => async (req, res) => {
   try {
     const item = await Model.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,         // Retourne le document mis à jour
-      runValidators: true // Valide les données avant mise à jour
+      new: true,         
+      runValidators: true 
     });
     
     if (!item) {
@@ -91,7 +91,7 @@ exports.updateOne = (Model) => async (req, res) => {
   }
 };
 
-// Supprimer un élément
+
 exports.deleteOne = (Model) => async (req, res) => {
   try {
     const item = await Model.findByIdAndDelete(req.params.id);

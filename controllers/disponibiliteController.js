@@ -2,21 +2,21 @@ const Disponibilite = require('../models/disponibiliteModel');
 const Entraineur = require('../models/entraineurModel');
 const crudController = require('./crudController');
 
-// Opérations CRUD de base
+
 exports.getAllDisponibilites = crudController.getAll(Disponibilite);
 exports.getDisponibilite = crudController.getOne(Disponibilite, { path: 'entraineur', select: 'nom prenom specialite' });
 exports.createDisponibilite = crudController.createOne(Disponibilite);
 exports.updateDisponibilite = crudController.updateOne(Disponibilite);
 exports.deleteDisponibilite = crudController.deleteOne(Disponibilite);
 
-// Fonctionnalités spécifiques aux disponibilités
 
-// Récupérer les disponibilités par date
+
+
 exports.getDisponibilitesByDate = async (req, res) => {
   try {
     const { date } = req.params;
     
-    // Vérifier que la date est au format valide
+    
     const dateObj = new Date(date);
     if (isNaN(dateObj.getTime())) {
       return res.status(400).json({
@@ -25,14 +25,14 @@ exports.getDisponibilitesByDate = async (req, res) => {
       });
     }
     
-    // Définir le début et la fin de la journée
+    
     const debutJour = new Date(dateObj);
     debutJour.setHours(0, 0, 0, 0);
     
     const finJour = new Date(dateObj);
     finJour.setHours(23, 59, 59, 999);
     
-    // Récupérer les disponibilités pour cette date
+    
     const disponibilites = await Disponibilite.find({
       date_dispo: { $gte: debutJour, $lte: finJour },
       reserve: false
@@ -52,7 +52,7 @@ exports.getDisponibilitesByDate = async (req, res) => {
   }
 };
 
-// Réserver une disponibilité
+
 exports.reserverDisponibilite = async (req, res) => {
   try {
     const disponibilite = await Disponibilite.findById(req.params.id);
@@ -73,7 +73,7 @@ exports.reserverDisponibilite = async (req, res) => {
     
     disponibilite.reserve = true;
     
-    // Ajouter des détails de réservation si fournis
+    
     if (req.body.details) {
       disponibilite.notes = disponibilite.notes 
         ? `${disponibilite.notes}\nRéservation: ${req.body.details}`
@@ -94,7 +94,7 @@ exports.reserverDisponibilite = async (req, res) => {
   }
 };
 
-// Annuler une réservation
+
 exports.annulerReservation = async (req, res) => {
   try {
     const disponibilite = await Disponibilite.findById(req.params.id);
@@ -115,7 +115,7 @@ exports.annulerReservation = async (req, res) => {
     
     disponibilite.reserve = false;
     
-    // Ajouter une note d'annulation si fournie
+    
     if (req.body.raison) {
       disponibilite.notes = disponibilite.notes 
         ? `${disponibilite.notes}\nAnnulation: ${req.body.raison}`
@@ -136,12 +136,12 @@ exports.annulerReservation = async (req, res) => {
   }
 };
 
-// Créer des disponibilités récurrentes
+
 exports.creerDisponibilitesRecurrentes = async (req, res) => {
   try {
     const { entraineur, date_dispo, heure_debut, heure_fin, recurrence, nbOccurrences } = req.body;
     
-    // Vérifier si l'entraîneur existe
+    
     const entraineurExists = await Entraineur.findById(entraineur);
     if (!entraineurExists) {
       return res.status(404).json({
@@ -150,7 +150,7 @@ exports.creerDisponibilitesRecurrentes = async (req, res) => {
       });
     }
     
-    // Vérifier que la date est au format valide
+    
     const dateInitiale = new Date(date_dispo);
     if (isNaN(dateInitiale.getTime())) {
       return res.status(400).json({
@@ -159,7 +159,7 @@ exports.creerDisponibilitesRecurrentes = async (req, res) => {
       });
     }
     
-    // Vérifier que le type de récurrence est valide
+    
     if (!['Hebdomadaire', 'Mensuelle'].includes(recurrence)) {
       return res.status(400).json({
         status: 'fail',
@@ -167,19 +167,19 @@ exports.creerDisponibilitesRecurrentes = async (req, res) => {
       });
     }
     
-    // Nombre d'occurrences (défaut: 4)
+    
     const nombreOccurrences = nbOccurrences || 4;
     
     const disponibilitesCreees = [];
     
-    // Créer les disponibilités récurrentes
+    
     for (let i = 0; i < nombreOccurrences; i++) {
       const dateCourante = new Date(dateInitiale);
       
       if (recurrence === 'Hebdomadaire') {
-        dateCourante.setDate(dateCourante.getDate() + (i * 7)); // Ajouter i semaines
+        dateCourante.setDate(dateCourante.getDate() + (i * 7)); 
       } else if (recurrence === 'Mensuelle') {
-        dateCourante.setMonth(dateCourante.getMonth() + i); // Ajouter i mois
+        dateCourante.setMonth(dateCourante.getMonth() + i); 
       }
       
       const nouvelleDisponibilite = await Disponibilite.create({
@@ -187,7 +187,7 @@ exports.creerDisponibilitesRecurrentes = async (req, res) => {
         date_dispo: dateCourante,
         heure_debut,
         heure_fin,
-        recurrence: i === 0 ? recurrence : 'Aucune', // Seule la première occurrence garde le type de récurrence
+        recurrence: i === 0 ? recurrence : 'Aucune', 
         notes: req.body.notes || ''
       });
       

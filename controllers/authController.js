@@ -1,11 +1,11 @@
 const User = require('../models/userModel');
 
-// Register a new user
+
 exports.register = async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
 
-    // Create user
+    
     const user = await User.create({
       username,
       email,
@@ -22,12 +22,12 @@ exports.register = async (req, res) => {
   }
 };
 
-// Login user
+
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validate email & password
+    
     if (!email || !password) {
       return res.status(400).json({
         status: 'fail',
@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Check for user
+    
     const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Check if password matches
+    
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
@@ -64,7 +64,7 @@ exports.login = async (req, res) => {
   }
 };
 
-// Logout user
+
 exports.logout = (req, res) => {
   res.cookie('token', 'none', {
     expires: new Date(Date.now() + 10 * 1000),
@@ -77,7 +77,7 @@ exports.logout = (req, res) => {
   });
 };
 
-// Get current logged in user
+
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -94,9 +94,9 @@ exports.getMe = async (req, res) => {
   }
 };
 
-// Helper function to get token from model, create cookie and send response
+
 const sendTokenResponse = (user, statusCode, res) => {
-  // Create token
+  
   const token = user.getSignedJwtToken();
 
   const options = {
@@ -106,7 +106,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     httpOnly: true
   };
 
-  // Set secure flag in production
+  
   if (process.env.NODE_ENV === 'production') {
     options.secure = true;
   }

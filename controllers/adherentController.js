@@ -2,16 +2,16 @@ const Adherent = require('../models/adherentModel');
 const Abonnement = require('../models/abonnementModel');
 const crudController = require('./crudController');
 
-// Opérations CRUD de base
+
 exports.getAllAdherents = crudController.getAll(Adherent);
 exports.getAdherent = crudController.getOne(Adherent);
 exports.createAdherent = crudController.createOne(Adherent);
 exports.updateAdherent = crudController.updateOne(Adherent);
 exports.deleteAdherent = crudController.deleteOne(Adherent);
 
-// Fonctionnalités spécifiques aux adhérents
 
-// Récupérer les abonnements d'un adhérent
+
+
 exports.getAbonnementsAdherent = async (req, res) => {
   try {
     const abonnements = await Abonnement.find({ adherent: req.params.id })
@@ -30,7 +30,7 @@ exports.getAbonnementsAdherent = async (req, res) => {
   }
 };
 
-// Ajouter un suivi de poids pour un adhérent
+
 exports.ajouterSuiviPoids = async (req, res) => {
   try {
     const { poids, commentaire } = req.body;
@@ -51,14 +51,14 @@ exports.ajouterSuiviPoids = async (req, res) => {
       });
     }
     
-    // Ajouter le nouveau suivi
+    
     adherent.suiviPoids.push({
       date: new Date(),
       poids,
       commentaire: commentaire || ''
     });
     
-    // Mettre à jour le poids actuel de l'adhérent
+    
     adherent.poids = poids;
     
     await adherent.save();
@@ -75,7 +75,7 @@ exports.ajouterSuiviPoids = async (req, res) => {
   }
 };
 
-// Obtenir l'historique du suivi de poids d'un adhérent
+
 exports.getSuiviPoids = async (req, res) => {
   try {
     const adherent = await Adherent.findById(req.params.id);
@@ -100,13 +100,13 @@ exports.getSuiviPoids = async (req, res) => {
   }
 };
 
-// Récupérer tous les adhérents avec leurs abonnements actifs
+
 exports.getAdherentsWithActiveSubscriptions = async (req, res) => {
   try {
     const adherents = await Adherent.find();
     const result = [];
     
-    // Pour chaque adhérent, récupérer ses abonnements actifs
+    
     for (const adherent of adherents) {
       const abonnements = await Abonnement.find({
         adherent: adherent._id,

@@ -3,7 +3,7 @@ const Adherent = require('../models/adherentModel');
 const Salle = require('../models/salleModel');
 const crudController = require('./crudController');
 
-// Opérations CRUD de base
+
 exports.getAllAbonnements = crudController.getAll(Abonnement);
 exports.getAbonnement = crudController.getOne(Abonnement, [
   { path: 'adherent', select: 'nom prenom email telephone' },
@@ -13,14 +13,14 @@ exports.createAbonnement = crudController.createOne(Abonnement);
 exports.updateAbonnement = crudController.updateOne(Abonnement);
 exports.deleteAbonnement = crudController.deleteOne(Abonnement);
 
-// Fonctionnalités spécifiques aux abonnements
 
-// Créer un nouvel abonnement avec validation
+
+
 exports.souscrireAbonnement = async (req, res) => {
   try {
     const { adherent, salle, type, date_debut, date_fin, montant } = req.body;
     
-    // Vérifier si l'adhérent existe
+    
     const adherentExists = await Adherent.findById(adherent);
     if (!adherentExists) {
       return res.status(404).json({
@@ -29,7 +29,7 @@ exports.souscrireAbonnement = async (req, res) => {
       });
     }
     
-    // Vérifier si la salle existe
+    
     const salleExists = await Salle.findById(salle);
     if (!salleExists) {
       return res.status(404).json({
@@ -38,7 +38,7 @@ exports.souscrireAbonnement = async (req, res) => {
       });
     }
     
-    // Vérifier si l'adhérent a déjà un abonnement actif pour cette salle
+    
     const abonnementExistant = await Abonnement.findOne({
       adherent,
       salle,
@@ -53,7 +53,7 @@ exports.souscrireAbonnement = async (req, res) => {
       });
     }
     
-    // Créer le nouvel abonnement
+    
     const nouvelAbonnement = await Abonnement.create({
       adherent,
       salle,
@@ -76,7 +76,7 @@ exports.souscrireAbonnement = async (req, res) => {
   }
 };
 
-// Renouveler un abonnement
+
 exports.renouvelerAbonnement = async (req, res) => {
   try {
     const abonnement = await Abonnement.findById(req.params.id);
@@ -88,7 +88,7 @@ exports.renouvelerAbonnement = async (req, res) => {
       });
     }
     
-    // Calculer la nouvelle date de fin en fonction du type d'abonnement
+    
     const nouvelleDate = new Date(abonnement.date_fin);
     
     switch (abonnement.type) {
@@ -108,11 +108,11 @@ exports.renouvelerAbonnement = async (req, res) => {
         nouvelleDate.setMonth(nouvelleDate.getMonth() + 1);
     }
     
-    // Mettre à jour l'abonnement
+    
     abonnement.date_fin = nouvelleDate;
     abonnement.actif = true;
     
-    // Si un nouveau montant est fourni, le mettre à jour
+    
     if (req.body.montant) {
       abonnement.montant = req.body.montant;
     }
@@ -131,7 +131,7 @@ exports.renouvelerAbonnement = async (req, res) => {
   }
 };
 
-// Résilier un abonnement
+
 exports.resilierAbonnement = async (req, res) => {
   try {
     const abonnement = await Abonnement.findById(req.params.id);
@@ -143,9 +143,9 @@ exports.resilierAbonnement = async (req, res) => {
       });
     }
     
-    // Mettre à jour l'abonnement
+    
     abonnement.actif = false;
-    abonnement.date_fin = new Date(); // Fin immédiate
+    abonnement.date_fin = new Date(); 
     
     await abonnement.save();
     
@@ -161,7 +161,7 @@ exports.resilierAbonnement = async (req, res) => {
   }
 };
 
-// Récupérer tous les abonnements actifs
+
 exports.getAbonnementsActifs = async (req, res) => {
   try {
     const abonnements = await Abonnement.find({
