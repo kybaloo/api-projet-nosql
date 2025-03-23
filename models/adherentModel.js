@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Personne } = require('./personneModel');
 
-// Schéma spécifique pour Adhérent
+
 const adherentSchema = new mongoose.Schema({
   num_membre: {
     type: String,
@@ -38,7 +38,7 @@ const adherentSchema = new mongoose.Schema({
   }
 });
 
-// Création du modèle Adhérent comme discriminateur de Personne
+
 const Adherent = Personne.discriminator('Adherent', adherentSchema);
 
 module.exports = Adherent; 

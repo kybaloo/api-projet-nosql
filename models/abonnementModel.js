@@ -49,7 +49,7 @@ const abonnementSchema = new mongoose.Schema({
   }
 });
 
-// Middleware pour vérifier la cohérence des dates
+
 abonnementSchema.pre('save', function(next) {
   if (this.date_fin && this.date_debut && this.date_fin <= this.date_debut) {
     return next(new Error('La date de fin doit être postérieure à la date de début'));
@@ -57,7 +57,7 @@ abonnementSchema.pre('save', function(next) {
   next();
 });
 
-// Méthode pour vérifier si l'abonnement est actif
+
 abonnementSchema.methods.estActif = function() {
   const now = new Date();
   return this.actif && now >= this.date_debut && now <= this.date_fin;

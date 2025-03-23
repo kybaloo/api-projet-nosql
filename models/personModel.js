@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-// Options to enable schema inheritance
+
 const options = { discriminatorKey: 'type', collection: 'persons' };
 
-// Generic Person schema
+
 const personSchema = new mongoose.Schema({
   nom: {
     type: String,
@@ -42,7 +42,7 @@ const personSchema = new mongoose.Schema({
   }
 }, options);
 
-// Create the Person model
+
 const Person = mongoose.model('Person', personSchema);
 
 module.exports = { 

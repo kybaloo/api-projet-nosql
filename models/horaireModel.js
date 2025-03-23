@@ -60,7 +60,7 @@ const horaireSchema = new mongoose.Schema({
   }
 });
 
-// Calcul automatique de la durée à partir des heures de début et de fin
+
 horaireSchema.pre('save', function(next) {
   if (this.debut && this.fin) {
     const [debutHeures, debutMinutes] = this.debut.split(':').map(Number);
@@ -68,9 +68,9 @@ horaireSchema.pre('save', function(next) {
     
     let dureeMinutes = (finHeures * 60 + finMinutes) - (debutHeures * 60 + debutMinutes);
     
-    // Si la durée est négative (par exemple cours finissant après minuit)
+    
     if (dureeMinutes < 0) {
-      dureeMinutes += 24 * 60; // Ajouter 24 heures en minutes
+      dureeMinutes += 24 * 60; 
     }
     
     this.duree = dureeMinutes;
@@ -78,7 +78,7 @@ horaireSchema.pre('save', function(next) {
   next();
 });
 
-// Vérification de la validité des heures
+
 horaireSchema.path('fin').validate(function(value) {
   if (!this.debut || !value) return true;
   
@@ -88,7 +88,7 @@ horaireSchema.path('fin').validate(function(value) {
   const debutTotal = debutHeures * 60 + debutMinutes;
   const finTotal = finHeures * 60 + finMinutes;
   
-  // La fin peut être avant le début uniquement si le cours traverse minuit
+  
   return finTotal !== debutTotal;
 }, 'L\'heure de fin doit être différente de l\'heure de début');
 

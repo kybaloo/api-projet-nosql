@@ -62,7 +62,7 @@ const salleSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-// Virtuals pour les relations avec d'autres collections
+
 salleSchema.virtual('equipements', {
   ref: 'Equipement',
   localField: '_id',

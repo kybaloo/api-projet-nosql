@@ -42,7 +42,7 @@ const disponibiliteSchema = new mongoose.Schema({
   }
 });
 
-// Vérification de la validité des heures
+
 disponibiliteSchema.path('heure_fin').validate(function(value) {
   if (!this.heure_debut || !value) return true;
   
@@ -52,15 +52,15 @@ disponibiliteSchema.path('heure_fin').validate(function(value) {
   const debutTotal = debutHeures * 60 + debutMinutes;
   const finTotal = finHeures * 60 + finMinutes;
   
-  // Si la fin est après le début ou si on traverse minuit
+  
   return finTotal > debutTotal || (finHeures < debutHeures);
 }, 'L\'heure de fin doit être après l\'heure de début');
 
-// Middleware pour vérifier la cohérence de la récurrence
+
 disponibiliteSchema.pre('save', function(next) {
   if (this.recurrence !== 'Aucune' && !this.finRecurrence) {
     this.finRecurrence = new Date();
-    this.finRecurrence.setMonth(this.finRecurrence.getMonth() + 3); // Par défaut, 3 mois
+    this.finRecurrence.setMonth(this.finRecurrence.getMonth() + 3); 
   }
   next();
 });

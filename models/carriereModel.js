@@ -50,13 +50,13 @@ const carriereSchema = new mongoose.Schema({
   }
 });
 
-// Middleware pour vérifier la cohérence des dates
+
 carriereSchema.pre('save', function(next) {
   if (this.date_fin && this.date_debut && this.date_fin <= this.date_debut) {
     return next(new Error('La date de fin doit être postérieure à la date de début'));
   }
   
-  // Si une date de fin est définie, on considère que la carrière n'est plus active
+  
   if (this.date_fin) {
     this.actif = false;
   }
@@ -64,13 +64,13 @@ carriereSchema.pre('save', function(next) {
   next();
 });
 
-// Méthode pour vérifier si la carrière est active
+
 carriereSchema.methods.estActive = function() {
   const now = new Date();
   return this.actif && now >= this.date_debut && (!this.date_fin || now <= this.date_fin);
 };
 
-// Index pour assurer qu'un entraîneur ne peut avoir qu'une seule carrière active par salle
+
 carriereSchema.index({ entraineur: 1, salle: 1, actif: 1 }, { 
   unique: true, 
   partialFilterExpression: { actif: true } 

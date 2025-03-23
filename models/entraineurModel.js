@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Personne } = require('./personneModel');
 
-// Schéma spécifique pour Entraîneur
+
 const entraineurSchema = new mongoose.Schema({
   num_coach: {
     type: String,
@@ -36,7 +36,7 @@ const entraineurSchema = new mongoose.Schema({
   }
 });
 
-// Création du modèle Entraîneur comme discriminateur de Personne
+
 const Entraineur = Personne.discriminator('Entraineur', entraineurSchema);
 
 module.exports = Entraineur; 

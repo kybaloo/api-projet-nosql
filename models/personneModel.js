@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-// Options pour permettre l'héritage de schéma
+
 const options = { discriminatorKey: 'type', collection: 'personnes' };
 
-// Schéma générique Personne
+
 const personneSchema = new mongoose.Schema({
   nom: {
     type: String,
@@ -42,7 +42,7 @@ const personneSchema = new mongoose.Schema({
   }
 }, options);
 
-// Création du modèle Personne
+
 const Personne = mongoose.model('Personne', personneSchema);
 
 module.exports = { 
