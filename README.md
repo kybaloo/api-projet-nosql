@@ -48,7 +48,7 @@ npm run dev
 ## Structure du projet
 
 ```
-api-projet-nosql/
+api-sytsas/
 ├── config/             # Configuration (base de données, etc.)
 ├── controllers/        # Contrôleurs pour gérer la logique métier
 ├── models/             # Modèles Mongoose
